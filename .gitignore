@@ -1,0 +1,15 @@
+# secrets and local config
+.env
+.env.*
+*.pem
+*.key
+
+# dependencies and build output
+node_modules/
+dist/
+build/
+
+# backups and local data
+*.sql
+*.dump
+*.bak
