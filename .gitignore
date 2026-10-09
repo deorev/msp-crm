@@ -1,6 +1,7 @@
 # secrets and local config
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 
@@ -11,5 +12,7 @@ build/
 
 # backups and local data
 *.sql
+!api/prisma/migrations/**/*.sql
 *.dump
 *.bak
+*.tsbuildinfo

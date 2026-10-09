@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  Tech
+  Sales
+  OpsManager @map("Ops Manager")
+  Admin
+
+  @@map("user_role")
+}
+
+model Tenant {
+  tenantId  String   @id @default(uuid()) @map("tenant_id") @db.Uuid
+  name      String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  users     User[]
+
+  @@map("tenants")
+}
+
+model User {
+  userId       String   @id @default(uuid()) @map("user_id") @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  name         String
+  email        String
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(Tech)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  tenant       Tenant   @relation(fields: [tenantId], references: [tenantId], onDelete: Cascade)
+
+  @@unique([tenantId, email])
+  @@map("users")
+}

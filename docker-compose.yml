@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mspcrm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mspcrm_local}
+      POSTGRES_DB: ${POSTGRES_DB:-msp_crm}
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mspcrm} -d ${POSTGRES_DB:-msp_crm}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:
